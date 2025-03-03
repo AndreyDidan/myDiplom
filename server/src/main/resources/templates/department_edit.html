@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Редактирование отдела</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+</head>
+<body>
+<header th:insert="~{blocks/header :: header}"></header>
+
+<div class="container mt-5 mb-5">
+    <h1>Редактирование отдела</h1>
+    <form method="post">
+        <p><b>Наименование отдела: </b>
+            <input type="text" th:value="${department.nameDepartment}" name="nameDepartment" placeholder="Введите наименование отдела" class="form-control"><br>
+        </p>
+
+        <label for="organizationShortName">Краткое наименование организации:</label>
+        <select name="organizationId" class="form-control">
+            <option value="" disabled>Выберите организацию</option>
+            <!-- Выводим список всех кратких наименований организаций -->
+            <th:block th:each="shortName : ${organizationShortNames}">
+                <option th:value="${shortName}"
+                        th:text="${shortName}"
+                        th:selected="${shortName == currentOrganizationId}"></option>
+            </th:block>
+        </select>
+        <br>
+        <button type="submit" class="btn btn-success">Обновить</button>
+    </form>
+</div>
+
+<footer th:insert="blocks/footer :: footer"></footer>
+</body>
+</html>

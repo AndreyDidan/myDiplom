@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Редактирование отдела</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+</head>
+<body>
+<header th:insert="~{blocks/header :: header}"></header>
+
+<div class="container mt-5 mb-5">
+    <div th:each="el : ${ticket}" class="alert alert-info mt-2">
+        <p><b>Номер заявки: </b><span th:text="${el.ticketId}"/></p>
+        <p><b>Автор заявки: </b><span th:text="${el.author.login}"/></p>
+        <p><b>Дата открытия заявки: </b><span th:text="${#temporals.format(el.dateCreate, 'dd.MM.yyyy HH:mm')}"/></p>
+        <p><b>Краткое описание заявки: </b><span th:text="${el.littleDescription}"/></p>
+        <p><b>Описание заявки: </b><span th:text="${el.description}"/></p>
+        <p><b>Название функции: </b><span th:text="${el.nameFunction ?: 'Не задано'}"/></p>
+        <p><b>Название функции (если создана из проблемы): </b><span th:text="${el.problemFunctionId?.functionSystem?.nameFunctionSystem ?: 'Не задано'}"/></p>
+        <p><b>Контракт: </b><span th:text="${el.contractId.numberContract}"/></p>
+        <p><b>Исполнитель заявки: </b><span th:text="${el.organizationPerfomerId}"/></p>
+        <p><b>Приоритет заявки: </b><span th:text="${el.limitsId.levelName}"/></p>
+        <p><b>Дата закрытия заявки: </b><span th:text="${#temporals.format(el.dateClose, 'dd.MM.yyyy HH:mm')}"/></p>
+        <p><b>Время на исполнение заявки: </b><span th:text="${el.limitsId.getFormattedPenaltysStart()}"/></p>
+        <p><b>Заявка просрочена: </b><span th:text="${el.isExpired ? 'Да' : 'Нет'}"/></p>
+        <p><b>Статус заявки: </b><span th:text="${el.status}"/></p>
+
+        <a th:href="'/ticket/' + ${el.ticketId} + '/edit'" class="btn btn-warning">Редактировать</a><br><br>
+
+        <form th:action="'/ticket/' + ${el.ticketId} + '/close'" method="post">
+            <button class="btn btn-warning" type="submit">Закрыть</button>
+        </form>
+
+        <br><a th:href="'/ticket'" class="btn btn-info">Назад</a><br><br>
+
+        <form th:action="'/ticket/' + ${el.ticketId} + '/remove'" method="post">
+            <button class="btn btn-warning" type="submit">Удалить</button>
+        </form>
+    </div>
+
+    <div th:each="comment : ${comments}">
+        <div class="comment-item alert alert-secondary mt-3">
+            <p><b>Автор: </b><span th:text="${comment.author.login}"></span></p>
+            <p><b>Дата: </b><span th:text="${#temporals.format(comment.created, 'dd.MM.yyyy HH:mm')}"></span></p>
+            <p><b>Комментарий: </b><span th:text="${comment.text}"></span></p>
+        </div>
+    </div>
+
+    <!-- Если комментариев нет, выводим сообщение -->
+    <div th:if="${#lists.isEmpty(comments)}">
+        <p>Комментарии отсутствуют.</p>
+    </div>
+    <form th:action="'/ticket/' + ${ticket[0].ticketId} + '/add'" method="post">
+        <textarea name="text" class="form-control" placeholder="Добавить комментарий..." required></textarea><br>
+        <button class="btn btn-primary" type="submit">Добавить комментарий</button>
+    </form>
+</div>
+
+
+<footer th:insert="blocks/footer :: footer"></footer>
+</body>
+</html>

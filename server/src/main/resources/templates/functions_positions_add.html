@@ -1,0 +1,178 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Добавление функции должности</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+</head>
+<body>
+<header th:replace="~{blocks/header :: header}"></header>
+
+<div class="container mt-5 mb-5">
+    <h1>Добавление функции должности</h1>
+
+    <!-- Блок ошибки, если она есть -->
+    <div th:if="${errorMessage}" class="alert alert-danger">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
+    <form action="/position/function/add" method="post">
+
+        <label for="organizationShortName">Краткое наименование организации:</label>
+        <select id="organizationSelect" name="organizationLitleName" class="form-control">
+            <option value="" disabled selected>Выберите организацию</option>
+            <th:block th:each="organization : ${organizationShortNames}">
+                <option th:value="${organization}" th:text="${organization}"></option>
+            </th:block>
+        </select><br>
+
+        <!-- Выбор отдела -->
+        <label for="departmentShortNames">Наименование отдела:</label>
+        <select id="departmentSelect" name="departmentName" class="form-control" disabled>
+            <option value="" disabled selected>Выберите отдел</option>
+        </select><br>
+
+        <!-- Выбор позиции -->
+        <label for="positionShortNames">Наименование позиции:</label>
+        <select id="positionSelect" name="positionId" class="form-control" disabled>
+            <option value="" disabled selected>Выберите должность</option>
+        </select><br>
+
+        <label for="systemShortNames">Краткое наименование системы:</label>
+        <select id="systemSelect" name="nameSystem" class="form-control">
+            <option value="" disabled selected>Выберите организацию</option>
+            <th:block th:each="nameSyst : ${systemShortNames}">
+                <option th:value="${nameSyst}" th:text="${nameSyst}"></option>
+            </th:block>
+        </select><br>
+
+        <!-- Выбор контракта -->
+        <label for="contractSelect">Номер контракта:</label>
+        <select id="contractSelect" name="contractNumber" class="form-control">
+            <option value="" disabled selected>Выберите контракт</option>
+            <th:block th:each="contract : ${contracts}">
+                <option th:value="${contract.numberContract}" th:text="${contract.numberContract}"></option>
+            </th:block>
+        </select><br>
+
+        <!-- Выбор функции -->
+        <!-- Выбор функций: multiple select для выбора нескольких функций -->
+        <label for="nameFunctionSystem">Наименование функции:</label>
+        <select id="nameFunctionSystem" name="nameFunctionSystem" class="form-control" multiple>
+            <option value="" disabled>Выберите функции</option>
+        </select><br>
+
+        <!-- Выбор права -->
+        <label>Выберите право по функции:</label><br>
+
+        <!-- Радиокнопки для выбора роли из enum -->
+        <input type="radio" name="rools" value="USER_OWNER"> USER_OWNER<br>
+        <input type="radio" name="rools" value="USER_USER"> USER_USER<br>
+        <input type="radio" name="rools" value="USER_EXECUT"> USER_EXECUT<br><br>
+
+         <button type="submit" class="btn btn-success">Добавить ограничение должности</button>
+     </form>
+ </div>
+
+ <script>
+
+   // Когда выбирается организация
+     $('#organizationSelect').change(function() {
+         var organizationLitleName = $(this).val();
+
+         if (organizationLitleName) {
+             // AJAX запрос для получения отделов
+             $.get('/position/function/departments', { organizationShortName: organizationLitleName }, function(departments) {
+                 // Очистить список отделов
+                 $('#departmentSelect').empty().append('<option value="" disabled selected>Выберите отдел</option>');
+
+                 // Включить select с отделами
+                 $('#departmentSelect').prop('disabled', false);
+
+                 // Добавить новые отделы в список
+                 departments.forEach(function(department) {
+                     $('#departmentSelect').append('<option value="' + department + '">' + department + '</option>');
+                 });
+             });
+         } else {
+             // Если организация не выбрана, отключаем список отделов
+             $('#departmentSelect').prop('disabled', true);
+         }
+     });
+
+   // Когда выбирается отдел
+   $('#departmentSelect').change(function() {
+       var departmentName = $(this).val();  // Получаем имя отдела
+       var organizationLitleName = $('#organizationSelect').val();  // Получаем имя организации
+
+       if (departmentName) {
+           $.get('/position/function/positions', { departmentName: departmentName, organizationShortName: organizationLitleName }, function(positions) {
+               $('#positionSelect').empty().append('<option value="" disabled selected>Выберите позицию</option>');
+               $('#positionSelect').prop('disabled', false);
+               positions.forEach(function(position) {
+                   $('#positionSelect').append('<option value="' + position + '">' + position + '</option>');
+               });
+           });
+       } else {
+           $('#positionSelect').prop('disabled', true);
+       }
+       });
+
+
+
+
+
+    // Когда выбирается система
+    $('#systemSelect').change(function() {
+        var nameSystem = $(this).val();
+        var contractNumber = $('#contractSelect').val(); // Получаем выбранный номер контракта
+
+        if (nameSystem && contractNumber) {
+            // AJAX запрос для получения функций по системе и контракту
+            $.get('/position/function/functionsBySystemAndContract', { systemShortName: nameSystem, contractNumber: contractNumber }, function(functions) {
+                // Очистить список функций
+                $('#nameFunctionSystem').empty().append('<option value="" disabled>Выберите функции</option>');
+
+                // Включить select с функциями
+                $('#nameFunctionSystem').prop('disabled', false);
+
+                // Добавить новые функции в список
+                functions.forEach(function(functionName) {
+                    $('#nameFunctionSystem').append('<option value="' + functionName + '">' + functionName + '</option>');
+                });
+            });
+        } else {
+            // Если система или контракт не выбраны, отключаем список функций
+            $('#nameFunctionSystem').prop('disabled', true);
+        }
+    });
+
+    // Когда выбирается контракт
+    $('#contractSelect').change(function() {
+        var nameSystem = $('#systemSelect').val(); // Получаем выбранную систему
+        var contractNumber = $(this).val(); // Получаем выбранный контракт
+
+        if (nameSystem && contractNumber) {
+            // Повторно вызываем AJAX для получения функций по системе и контракту
+            $.get('/position/function/functionsBySystemAndContract', { systemShortName: nameSystem, contractNumber: contractNumber }, function(functions) {
+                $('#nameFunctionSystem').empty().append('<option value="" disabled>Выберите функции</option>');
+                $('#nameFunctionSystem').prop('disabled', false);
+
+                functions.forEach(function(functionName) {
+                    $('#nameFunctionSystem').append('<option value="' + functionName + '">' + functionName + '</option>');
+                });
+            });
+        } else {
+            $('#nameFunctionSystem').prop('disabled', true);
+        }
+    });
+
+ </script>
+
+ <footer th:replace="~{blocks/footer :: footer}"></footer>
+ </body>
+ </html>

@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Пользователь системы</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+</head>
+<body>
+<header th:insert="blocks/header :: header"></header>
+
+<div class="container mt-5 mb-5">
+    <div th:each="el : ${user}" class="alert alert-info mt-2">
+        <p><b>Логин: </b><span th:text="${el.username}"/></p>
+        <p><b>Имя: </b><span th:text="${el.login}"/></p>
+        <p><b>Фамилия: </b><span th:text="${el.surname}"/></p>
+        <p><b>Email: </b><span th:text="${el.email}"/></p>
+        <p><b>Пароль: </b><span th:password="${el.password}"/></p>
+        <p><b>Телефон: </b><span th:text="${el.phone}"/></p>
+        <p><b>Организация: </b><span th:text="${el.positionId.departmentId.organizationId.organizationName}"/></p>
+        <p><b>Отдел: </b><span th:text="${el.positionId.departmentId.nameDepartment}"/></p>
+        <p><b>Должность: </b><span th:text="${el.positionId.namePosition}"/></p>
+        <p><b>Роль: </b><span th:text="${el.role}"/></p>
+        <p><b>Активность: </b><span th:text="${el.active}"/></p>
+        <a th:href="'/register/users/' + ${el.userId} + '/edit'" class="btn btn-warning">Редактировать</a><br><br>
+        <form th:action="'/register/users/' + ${el.userId} + '/remove'" method="post">
+            <button class="btn btn-warning" type="submit">Удалить</button>
+        </form>
+    </div>
+</div>
+
+<footer th:insert="blocks/footer :: footer"></footer>
+</body>
+</html>

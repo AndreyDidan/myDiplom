@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Функции должности</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
+    <script type="text/javascript" th:src="@{/js/bootstrap.bundle.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+</head>
+<body>
+<header th:insert="~{blocks/header :: header}"></header>
+
+<div class="container mt-5">
+    <h1>Список функций у должностей</h1>
+
+    <form th:action="'/position/function/add'" method="get">
+        <button class="btn btn-primary" type="submit">Добавить функцию должности</button>
+    </form> <br>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th scope="col">Наименование организации</th>
+                <th scope="col">Наименование отдела</th>
+                <th scope="col">Наименование должности</th>
+                <th scope="col">Номер контракта</th>
+                <th scope="col">Наименования функций системы</th>
+                <th scope="col">Право</th>
+                <th scope="col">Действие</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="el : ${functionsPositions}" class="alert alert-info mt-2">
+                <td th:text="${el.positionId.departmentId.organizationId.organizationName}"></td>
+                <td th:text="${el.positionId.departmentId.nameDepartment}"></td>
+                <td th:text="${el.positionId.namePosition}"></td>
+                <td th:text="${el.numberContract}"></td>
+                <td>
+                    <ul>
+                        <li th:each="functionSystem : ${el.functionSystems}" th:text="${functionSystem.nameFunctionSystem}"></li>
+                    </ul>
+                </td>
+
+                <td th:text="${el.rools}"></td>
+                <td>
+                    <a th:href="'/position/function/' + ${el.functionPosityonId}" class="btn btn-warning">Детальнее</a><br>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<footer th:insert="blocks/footer :: footer"></footer>
+</body>
+</html>

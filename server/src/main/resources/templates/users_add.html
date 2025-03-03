@@ -1,0 +1,119 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Добавление пользователя</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+</head>
+<body>
+<header th:replace="~{blocks/header :: header}"></header>
+
+<div class="container mt-5 mb-5">
+    <h1>Добавление пользователя</h1>
+    <form action="/register/users/add" method="post">
+        <!-- Поля для пользователя -->
+        <p><b>Имя: </b></p>
+        <input type="text" name="username" placeholder="Введите имя" class="form-control"><br>
+        <p><b>Фамилия: </b></p>
+        <input type="text" name="surname" placeholder="Введите фамилию" class="form-control"><br>
+        <p><b>Логин: </b></p>
+        <input type="text" name="login" placeholder="Введите логин" class="form-control"><br>
+        <p><b>Email: </b></p>
+        <input type="text" name="email" placeholder="Введите email" class="form-control"><br>
+        <p><b>Пароль: </b></p>
+        <input type="password" name="password" placeholder="Введите пароль" class="form-control"><br>
+        <p><b>Телефон: </b></p>
+        <input type="text" name="phone" placeholder="Введите телефон" class="form-control"><br>
+
+        <!-- Выбор организации -->
+        <label for="organizationShortName">Краткое наименование организации:</label>
+        <select id="organizationSelect" name="organizationLitleName" class="form-control">
+            <option value="" disabled selected>Выберите организацию</option>
+            <th:block th:each="organization : ${organizationShortNames}">
+                <option th:value="${organization}" th:text="${organization}"></option>
+            </th:block>
+        </select><br>
+
+        <!-- Динамически изменяемый список отделов -->
+        <label for="departmentSelect">Наименование отдела:</label>
+        <select id="departmentSelect" name="departmentName" class="form-control" disabled>
+            <option value="" disabled selected>Выберите отдел</option>
+        </select><br>
+
+        <!-- Динамически изменяемый список должностей -->
+        <label for="positionSelect">Наименование должности:</label>
+        <select id="positionSelect" name="namePosition" class="form-control" disabled>
+            <option value="" disabled selected>Выберите должность</option>
+        </select><br>
+
+        <!-- Роли пользователя-->
+        <div class="form-group">
+            <label>Роль:</label><br>
+            <input type="checkbox" name="role" value="USER"> USER<br>
+            <input type="checkbox" name="role" value="USER_USER"> USER_USER<br>
+            <input type="checkbox" name="role" value="ADMIN"> ADMIN<br>
+        </div>
+
+        <!-- Поле активности с чекбоксом -->
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="active" name="active">
+            <label class="form-check-label" for="active">Активность</label>
+        </div>
+        <input type="hidden" name="active" value="false"/>
+
+        <button type="submit" class="btn btn-success">Добавить пользователя</button>
+    </form>
+</div>
+
+<footer th:replace="~{blocks/footer :: footer}"></footer>
+
+<script>
+    $(document).ready(function () {
+        // Обработчик изменения выбранной организации
+        $('#organizationSelect').change(function () {
+            var organizationShortName = $(this).val();
+
+            if (organizationShortName) {
+                // Получаем список отделов для выбранной организации
+                $.get('/register/departments', { organizationShortName: organizationShortName }, function (data) {
+                    // Очищаем и добавляем новые опции для списка отделов
+                    $('#departmentSelect').prop('disabled', false).empty().append('<option value="" disabled selected>Выберите отдел</option>');
+                    data.forEach(function (department) {
+                        $('#departmentSelect').append('<option value="' + department + '">' + department + '</option>');
+                    });
+                });
+            } else {
+                // Если организация не выбрана, очищаем и блокируем список отделов
+                $('#departmentSelect').prop('disabled', true).empty().append('<option value="" disabled selected>Выберите организацию сначала</option>');
+                $('#positionSelect').prop('disabled', true).empty().append('<option value="" disabled selected>Выберите отдел сначала</option>');
+            }
+        });
+
+        // Обработчик изменения выбранного отдела
+        $('#departmentSelect').change(function () {
+            var departmentName = $(this).val();
+            var organizationShortName = $('#organizationSelect').val();
+
+            if (departmentName && organizationShortName) {
+                // Получаем список должностей для выбранного отдела
+                $.get('/register/positions', { departmentName: departmentName, organizationShortName: organizationShortName }, function (data) {
+                    // Очищаем и добавляем новые опции для списка должностей
+                    $('#positionSelect').prop('disabled', false).empty().append('<option value="" disabled selected>Выберите должность</option>');
+                    data.forEach(function (position) {
+                        $('#positionSelect').append('<option value="' + position + '">' + position + '</option>');
+                    });
+                });
+            } else {
+                // Если отдел не выбран, очищаем и блокируем список должностей
+                $('#positionSelect').prop('disabled', true).empty().append('<option value="" disabled selected>Выберите отдел сначала</option>');
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

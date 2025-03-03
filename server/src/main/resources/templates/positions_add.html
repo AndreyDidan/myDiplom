@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Добавление должности</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+
+</head>
+<body>
+<header th:insert="blocks/header :: header"></header>
+
+<div class="container mt-5 mb-5">
+    <h1>Добавление должности</h1>
+
+    <!-- Блок ошибки, если она есть -->
+    <div th:if="${errorMessage}" class="alert alert-danger">
+        <p th:text="${errorMessage}"></p>
+    </div>
+    <form th:action="@{/organization/department/{departmentId}/position/add(departmentId=${departmentId})}" method="post">
+        <input type="text" name="namePosition" placeholder="Введите наименование должности" class="form-control"><br>
+        <input type="text" name="descriptionPosition" placeholder="Введите описание должности" class="form-control"><br>
+        <button type="submit" class="btn btn-success">Добавить должность</button>
+    </form>
+</div>
+
+<footer th:replace="~{blocks/footer :: footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<div th:fragment="header" xmlns:th="http://www.w3.org/1999/xhtml">
+            <nav class="navbar navbar-expand-lg bg-body-tertiary">
+                <div class="container-fluid" style="background-color: #2AD1C7;">
+                    <a class="navbar-brand" href="/">TicketManager</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="/">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Link</a>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Системы
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="/system">Список всех систем</a></li>
+                                    <li><a class="dropdown-item" href="/system/add">Добавить систему</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Виртуальные машины на которрых размещены функции
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="/system/function/machine">Список виртуальных машин</a></li>
+                                    <li><a class="dropdown-item" href="/system/function/machine/add">Добавить виртуальную машину</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Функции систем
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="/system/function/all">Список функций систем</a></li>
+                                    <li><a class="dropdown-item" href="/system/function/add">Добавить функцию системы</a></li>
+                                </ul>
+                            </li>
+
+                            
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Права по работе с функцией у должностей
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="/position/function">Права должностей по работе с функцией</a></li>
+                                    <li><a class="dropdown-item" href="/position/function/add">Добавить право должности</a></li>
+                                </ul>
+                            </li>
+
+
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="/contract">Контракт</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/specification">Техническое задание</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Структура организации
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="/organization">Организации</a></li>
+                                    <li><a class="dropdown-item" href="/organization/department">Отделы</a></li>
+                                    <li><a class="dropdown-item" href="organization/department/position">Должности</a></li>
+                                    <li><a class="dropdown-item" href="/register/users">Users</a></li>
+                                </ul>
+                            </li>
+
+                        </ul>
+                            <a class="nav-link" href="/logout">Выход</a>
+                    </div>
+                </div>
+            </nav>
+</div>

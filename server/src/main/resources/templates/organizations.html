@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Организации</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
+    <script type="text/javascript" th:src="@{/js/bootstrap.bundle.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+</head>
+<body>
+<header th:insert="~{blocks/header :: header}"></header>
+<div class="container mt-5">
+
+    <h1>Список организаций</h1><br>
+    <form th:action="'/organization/add'" method="get">
+        <button class="btn btn-primary" type="submit">Добавить организацию</button>
+    </form> <br>
+    <table class="table table-light">
+        <thead>
+            <tr>
+                <th scope="col">Краткое наименование организации</th>
+                <th scope="col">ИНН</th>
+                <th scope="col">Адресс</th>
+                <th scope="col">Телефон секретаря</th>
+                <th scope="col">Email</th>
+                <th scope="col">Действие</th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr th:each="el : ${organizations}" class="table-hover">
+            <td th:text="${el.littleNameOrganization}"></td>
+            <td th:text="${el.inn}"></td>
+            <td th:text="${el.adress}"></td>
+            <td th:text="${el.phoneOrganization}"></td>
+            <td th:text="${el.emailOrganization}"></td>
+            <td>
+                <a th:href="'/organization/' + ${el.organizationId}" class="btn btn-warning">Детальнее</a><br>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<footer th:insert="blocks/footer :: footer"></footer>
+</body>
+</html>

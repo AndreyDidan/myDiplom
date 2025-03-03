@@ -1,0 +1,92 @@
+<div th:fragment="header" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+    <nav class="navbar bg-body-tertiary  fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">TicketManager</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">TicketManager</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <form class="d-flex mt-3" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+                <div class="offcanvas-body">
+                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                        <li class="nav-item" sec:authorize="hasAnyRole('ADMIN', 'USER')">
+                            <a class="nav-link active" aria-current="page" href="/">Главная</a>
+                        </li>
+                        <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Работа с добавлением систем
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/system">Список всех систем</a></li>
+                                <li><a class="dropdown-item" href="/system/add">Добавить систему</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Работа с добавлением функций
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/system/function/all">Список всех функций</a></li>
+                                <li><a class="dropdown-item" href="/system/function/add">Добавить функцию</a></li>
+                                <li><a class="dropdown-item" href="/specification">Список виртуальных машин</a></li>
+                                <li><a class="dropdown-item" href="/system/function/machine/add">Добавить виртуальную машину</a></li>
+                                <li><a class="dropdown-item" href="/contract">Контракт</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Работа по добавлению структуры организации
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/organization">Организации</a></li>
+                                <li><a class="dropdown-item" href="/organization/department">Отделы</a></li>
+                                <li><a class="dropdown-item" href="organization/department/position">Должности</a></li>
+                                <li><a class="dropdown-item" href="/register/users">Пользователи</a></li>
+                                <li><a class="dropdown-item" href="/position/function">Права должностей по работе с функцией</a></li>
+                                <li><a class="dropdown-item" href="/position/function/add">Добавить право должности</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown" sec:authorize="hasAnyRole('ADMIN', 'USER', 'USER_USER')">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Работа с проблемами
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/problem/all">Все проблемы</a></li>
+                                <li><a class="dropdown-item" href="/problem/add">Направить проблему</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item dropdown" sec:authorize="hasAnyRole('ADMIN', 'USER')">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Работа с заявками
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/ticket">Все заявки</a></li>
+                                <li><a class="dropdown-item" href="/ticket/add">Направить заявку</a></li>
+                            </ul>
+                        </li>
+
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/logout">Выход</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <br>
+    <br>
+    <br>
+</div>

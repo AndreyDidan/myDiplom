@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Добавление функции системы</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+</head>
+<body>
+<header th:replace="~{blocks/header :: header}"></header>
+
+<div class="container mt-5 mb-5">
+    <h1>Добавление функции системы</h1>
+
+    <!-- Блок ошибки, если она есть -->
+    <div th:if="${errorMessage}" class="alert alert-danger">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
+    <form action="/system/function/add" method="post">
+        <!-- Выбор системы -->
+        <label for="littleNameSystem">Краткое наименование системы:</label>
+        <select id="systemSelect" name="littleNameSystem" class="form-control">
+            <option value="" disabled selected>Выберите систему</option>
+            <th:block th:each="shortName : ${systemShortLittleNameSystem}">
+                <option th:value="${shortName}" th:text="${shortName}"></option>
+            </th:block>
+        </select>
+        <br>
+
+        <input type="text" name="nameFunctionSystem" placeholder="Введите название функции" class="form-control" th:value="${nameFunctionSystem}"><br>
+        <!--<div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label">Введите описание функции</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+        </div>-->
+        <div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label">Введите описание функции</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" name="description" rows="3" th:value="${description}"></textarea>
+        </div>
+        <!--<input type="text" name="description" placeholder="Введите название функции" class="form-control" th:value="${nameFunctionSystem}"><br>-->
+
+
+        <!-- Выбор контракта -->
+        <label for="contractId">Краткое наименование контракта:</label>
+        <select id="contractSelect" name="contractId" class="form-control">
+            <option value="" disabled selected>Выберите контракт</option>
+            <th:block th:each="shortName : ${contractShortNames}">
+                <option th:value="${shortName}" th:text="${shortName}"></option>
+            </th:block>
+        </select>
+        <br>
+
+        <!-- Выбор виртуальной машины -->
+        <label for="ipVirtualMachine">IP адрес виртуальной машины:</label>
+        <select id="machineSelect" name="ipVirtualMachine" class="form-control">
+            <option value="" disabled selected>Выберите IP</option>
+            <th:block th:each="shortName : ${machineShortNames}">
+                <option th:value="${shortName}" th:text="${shortName}"></option>
+            </th:block>
+        </select>
+        <br>
+
+        <input type="text" name="port" placeholder="Введите порт передачи данных" class="form-control" th:value="${port}"><br>
+
+        <!-- Функция принята в эксплуатацию -->
+        <label for="functionAccept">Функция принята в эксплуатацию:</label>
+        <div>
+            <input type="radio" name="functionAccept" value="true" th:checked="${functionAccept == true}"> Да
+            <input type="radio" name="functionAccept" value="false" th:checked="${functionAccept == false}"> Нет
+            <input type="radio" name="functionAccept" value="null" th:checked="${functionAccept == null}"> Не определено
+        </div>
+        <br>
+
+        <button type="submit" class="btn btn-success">Добавить функцию</button>
+    </form>
+
+</div>
+
+<footer th:replace="~{blocks/footer :: footer}"></footer>
+</body>
+</html>

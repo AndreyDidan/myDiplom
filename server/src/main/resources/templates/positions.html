@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Должности</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+</head>
+<body>
+<header th:insert="~{blocks/header :: header}"></header>
+
+<div class="container mt-5">
+    <h1>Список должностей</h1>
+    <form th:action="@{/organization/department/{departmentId}/position/add(departmentId=${departmentId})}" method="get">
+        <button class="btn btn-primary" type="submit">Добавить должность</button>
+    </form> <br>
+
+    <div th:each="el : ${department}" class="alert alert-info mt-1">
+        <p><b>Должности отдела <span th:text="${el.nameDepartment}"/>, в <span th:text="${el.organizationId.littleNameOrganization}"/></b></p>
+    </div>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th scope="col">Наименования должностей</th>
+            <th scope="col">Описание должностей</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="el : ${positions}" class="alert alert-info mt-2">
+            <td th:text="${el.namePosition}"></td>
+            <td th:text="${el.descriptionPosition}"></td>
+            <td>
+                <a th:href="'/organization/department/' + ${el.departmentId.departmentId} + '/position/' + ${el.positionId}" class="btn btn-warning">Детальнее</a><br>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<footer th:insert="blocks/footer :: footer"></footer>
+</body>
+</html>

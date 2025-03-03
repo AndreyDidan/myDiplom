@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Редактирование должности</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+</head>
+<body>
+<header th:replace="~{blocks/header :: header}"></header>
+
+<div class="container mt-5 mb-5">
+    <h1>Редактирование должности</h1>
+
+    <!-- Блок ошибки, если она есть -->
+    <div th:if="${errorMessage}" class="alert alert-danger">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
+    <form method="post">
+        <p><b>Наименование должности: </b>
+            <input type="text" th:value="${position.namePosition}" name="namePosition" placeholder="Введите название должности" class="form-control"><br>
+        </p>
+
+        <p><b>Описание должности: </b>
+            <input type="text" th:value="${position.descriptionPosition}" name="descriptionPosition" placeholder="Введите описание должности" class="form-control"><br>
+        </p>
+
+        <!-- Выбор организации -->
+        <label for="organizationShortName">Краткое наименование организации:</label>
+        <select id="organizationSelect" name="organizationId" class="form-control">
+            <option value="" disabled selected>Выберите организацию</option>
+            <th:block th:each="shortName : ${organizationShortNames}">
+                <option th:value="${shortName}" th:text="${shortName}" th:selected="${shortName == currentOrganizationId}"></option>
+            </th:block>
+        </select>
+        <br>
+
+        <!-- Выбор отдела -->
+        <label for="departmentNames">Наименование отдела:</label>
+        <select id="departmentSelect" name="departmentId" class="form-control">
+            <option value="" disabled selected>Выберите отдел</option>
+            <th:block th:each="department : ${departmentShortNames}">
+                <option th:value="${department}" th:text="${department}" th:selected="${department == currentDepartmentId}"></option>
+            </th:block>
+        </select>
+        <br>
+
+        <button type="submit" class="btn btn-success">Обновить</button>
+    </form>
+</div>
+
+<script>
+    // Когда выбирается организация
+    $('#organizationSelect').change(function() {
+    var organizationShortName = $(this).val();
+
+    if (organizationShortName) {
+        // AJAX запрос для получения отделов
+        $.get('/position/departments', { organizationShortName: organizationShortName }, function(departments) {
+            // Очистить список отделов
+            $('#departmentSelect').empty().append('<option value="" disabled selected>Выберите отдел</option>');
+
+            // Включить select с отделами
+            $('#departmentSelect').prop('disabled', false);
+
+            // Добавить новые отделы в список
+            departments.forEach(function(department) {
+                $('#departmentSelect').append('<option value="' + department + '">' + department + '</option>');
+            });
+        });
+    } else {
+        // Если организация не выбрана, отключаем список отделов
+        $('#departmentSelect').prop('disabled', true);
+    }
+});
+</script>
+
+<footer th:replace="~{blocks/footer :: footer}"></footer>
+</body>
+</html>

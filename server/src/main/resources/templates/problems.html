@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Проблемы</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
+    <script type="text/javascript" th:src="@{/js/bootstrap.bundle.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+</head>
+<body>
+<header th:insert="~{blocks/header :: header}"></header>
+
+<div class="container mt-5">
+    <h1>Список всех проблем</h1>
+
+    <form th:action="'/problem/add'" method="get">
+        <button class="btn btn-primary" type="submit">Добавить проблему</button>
+    </form> <br>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th scope="col">Номер проблемы</th>
+            <th scope="col">Дата сообщения о проблеме</th>
+            <th scope="col">Пользователь направивший проблему</th>
+            <th scope="col">Система</th>
+            <th scope="col">Функция</th>
+            <th scope="col">Краткое описание проблемы</th>
+            <th scope="col">Наличие рекомендаций по устранению проблемы</th>
+            <th scope="col">Действие</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="el : ${problems}" class="alert alert-info mt-2">
+            <td th:text="${el.problemId}"></td>
+            <td th:text="${#temporals.format(el.dateCreatedProblem, 'dd.MM.yyyy HH:mm')}"></td>
+            <td th:text="${el.userId.login}"></td>
+            <td th:text="${el.functionSystem?.systemId?.littleNameSystem ?: 'Не задано'}"></td>
+            <td th:text="${el.functionSystem?.nameFunctionSystem ?: 'Не задано'}"></td>
+            <!--<td th:text="${el.functionsPosition?.functionSystems?.systemId?.littleNameSystem ?: 'Не задано'}"></td>
+            <td th:text="${el.functionsPosition?.functionSystems?.nameFunctionSystem ?: 'Не задано'}"></td>-->
+            <td th:text="${el.litleDescriptionProblem}"></td>
+            <td th:text="${el.isRecommendation ? 'Да' : 'Нет'}"></td>
+            <td>
+                <a th:href="'/problem/' + ${el.problemId}" class="btn btn-warning">Детальнее</a><br>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</div>
+<footer th:insert="blocks/footer :: footer"></footer>
+</body>
+</html>

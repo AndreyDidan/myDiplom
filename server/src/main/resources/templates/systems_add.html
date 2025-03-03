@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Добавить систему</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+</head>
+<body>
+<header th:insert="~{blocks/header :: header}"></header>
+
+<div class="container mt-5">
+    <h1>Добавление новой системы</h1>
+    <form th:action="@{/system/add}" method="post">
+        <div class="mb-3">
+            <label for="nameSystem" class="form-label">Название системы</label>
+            <input type="text" class="form-control" id="nameSystem" name="nameSystem" required>
+        </div>
+        <div class="mb-3">
+            <label for="littleNameSystem" class="form-label">Краткое название системы</label>
+            <input type="text" class="form-control" id="littleNameSystem" name="littleNameSystem" required>
+        </div>
+        <div class="mb-3">
+            <label for="numberContract" class="form-label">Номер контракта</label>
+            <select class="form-control" id="numberContract" name="numberContract" required>
+                <option th:each="contractShortName : ${contractShortNames}"
+                        th:value="${contractShortName}"
+                        th:text="${contractShortName}"> </option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Добавить</button>
+    </form>
+
+    <div th:if="${errorMessage}" class="alert alert-danger mt-3">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
+    <a href="/system" class="btn btn-secondary mt-3">Назад</a>
+</div>
+
+<footer th:insert="blocks/footer :: footer"></footer>
+</body>
+</html>

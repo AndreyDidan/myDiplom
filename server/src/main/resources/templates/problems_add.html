@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Добавление проблемы</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+</head>
+<body>
+<header th:replace="~{blocks/header :: header}"></header>
+
+<div class="container mt-5 mb-5">
+    <h1>Добавление проблемы</h1>
+
+    <!-- Блок ошибки, если она есть -->
+    <div th:if="${error}" class="alert alert-danger">
+        <p th:text="${error}"></p>
+    </div>
+
+    <form action="/problem/add" method="post">
+        <input type="datetime-local" name="dateCreatedProblem" placeholder="Введите дату начала действия контракта" class="form-control" th:value="${dateCreatedProblem}"><br>
+
+
+        <label for="systemShortNames">Краткое наименование системы:</label>
+        <select id="systemSelect" name="nameSystem" class="form-control">
+            <option value="" disabled selected>Выберите систему</option>
+            <th:block th:each="nameSyst : ${systemShortNames}">
+                <option th:value="${nameSyst}" th:text="${nameSyst}"></option>
+            </th:block>
+        </select><br>
+
+        <!-- Выбор отдела -->
+        <label for="functionSystemShortName">Наименование функции:</label>
+        <select id="nameFunctionSelect" name="nameFunctionSystem" class="form-control" disabled>
+            <option value="" disabled selected>Выберите функцию</option>
+        </select>
+        <br>
+
+        <input type="text" name="litleDescriptionProblem" placeholder="Введите краткое описание проблемы" class="form-control" th:value="${litleDescriptionProblem}"><br>
+
+        <textarea name="descriptionProblem" placeholder="Введите описание проблемы" class="form-control" rows="4" th:value="${descriptionProblem}"></textarea><br>
+
+        <button type="submit" class="btn btn-success">Добавить проблему</button>
+    </form>
+</div>
+
+<script>
+    $('#systemSelect').change(function() {
+    var systemShortNames = $(this).val();
+
+    if (systemShortNames) {
+        // AJAX запрос для получения функций
+        $.get('/problem/functionssystem', { systemShortNames: systemShortNames }, function(functions) {
+            // Очистить список функций
+            $('#nameFunctionSelect').empty().append('<option value="" disabled selected>Выберите функцию</option>');
+
+            // Включить select с функциями
+            $('#nameFunctionSelect').prop('disabled', false);
+
+            // Добавить новые функции
+            functions.forEach(function(func) {
+                $('#nameFunctionSelect').append('<option value="' + func + '">' + func + '</option>');
+            });
+        });
+    } else {
+        // Если система не выбрана, отключаем список функций
+        $('#nameFunctionSelect').prop('disabled', true);
+    }
+});
+</script>
+
+<footer th:replace="~{blocks/footer :: footer}"></footer>
+</body>
+</html>

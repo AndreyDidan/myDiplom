@@ -1,0 +1,162 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Добавление заявки</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+</head>
+<body>
+<header th:replace="~{blocks/header :: header}"></header>
+
+<div class="container mt-5 mb-5">
+    <h1>Добавление заявки</h1>
+    <form action="/ticket/add" method="post">
+        <input type="datetime-local" name="dateCreatedProblem" placeholder="Введите дату заявки" class="form-control" th:value="${dateCreatedProblem}"><br>
+
+
+        <label for="problemShortNames">Выбирите проблему:</label>
+        <select id="problemSelect" name="problemFunctionId" class="form-control">
+            <option value="" disabled selected>Выберите проблему</option>
+            <th:block th:each="problemFunction : ${problemShortNames}">
+                <option th:value="${problemFunction}" th:text="${problemFunction}"></option>
+            </th:block>
+        </select><br>
+
+
+        <input type="text" name="litleDescriptionProblem" placeholder="Кратко введите проблему" class="form-control"><br>
+        <textarea name="descriptionProblem" placeholder="Введите описание проблемы" class="form-control" rows="4" th:value="${descriptionProblem}"></textarea><br>
+
+
+        <label for="systemShortNames">Краткое наименование системы:</label>
+        <select id="systemSelect" name="nameSystem" class="form-control">
+            <option value="" disabled selected>Выберите систему</option>
+            <th:block th:each="nameSyst : ${systemShortNames}">
+                <option th:value="${nameSyst}" th:text="${nameSyst}"></option>
+            </th:block>
+        </select><br>
+
+        <!-- Выбор функции -->
+        <label for="functionSystemShortName">Наименование функции:</label>
+        <select id="nameFunctionSelect" name="nameFunctionSystem" class="form-control" disabled>
+            <option value="" disabled selected>Выберите функцию</option>
+        </select>
+        <br>
+
+
+        <label for="contractsShortNames">Номер контракта:</label>
+        <select id="contractSelect" name="numberContract" class="form-control" disabled>
+            <option value="" disabled selected>Выберите функцию</option>
+        </select>
+        <br>
+
+        <!-- Выбор ограничения -->
+        <label for="levelsShortNames">Наименование ограничения:</label>
+        <select id="levelSelect" name="limit" class="form-control" disabled>
+            <option value="" disabled selected>Выберите функцию</option>
+        </select>
+        <br>
+
+
+        <button type="submit" class="btn btn-success">Добавить заявку</button>
+    </form>
+</div>
+
+<script>
+
+    $('#systemSelect').change(function() {
+    var systemShortNames = $(this).val();
+
+    if (systemShortNames) {
+        // AJAX запрос для получения функций
+        $.get('/problem/functionssystem', { systemShortNames: systemShortNames }, function(functions) {
+            // Очистить список функций
+            $('#nameFunctionSelect').empty().append('<option value="" disabled selected>Выберите функцию</option>');
+
+            // Включить select с функциями
+            $('#nameFunctionSelect').prop('disabled', false);
+
+            // Добавить новые функции
+            functions.forEach(function(func) {
+                $('#nameFunctionSelect').append('<option value="' + func + '">' + func + '</option>');
+            });
+        });
+    } else {
+        // Если система не выбрана, отключаем список функций
+        $('#nameFunctionSelect').prop('disabled', true);
+    }
+});
+
+
+
+
+$('#nameFunctionSelect').change(function() {
+        var functionName = $(this).val(); // Получаем название функции
+
+        if (functionName) {
+            // AJAX запрос для получения контрактов, связанных с функцией
+            $.get('/ticket/allcontractfunctions', { nameFunctionSystem: functionName }, function(contracts) {
+                // Очистить список контрактов
+                $('#contractSelect').empty().append('<option value="" disabled selected>Выберите номер контракта</option>');
+
+                // Включить select с контрактами
+                $('#contractSelect').prop('disabled', false);
+
+                // Добавить новые контракты
+                contracts.forEach(function(contract) {
+                    $('#contractSelect').append('<option value="' + contract + '">' + contract + '</option>');
+                });
+            }).fail(function() {
+                console.error("Ошибка запроса!");
+                $('#contractSelect').prop('disabled', true); // Если запрос не успешен, отключаем select
+            });
+        } else {
+            // Если функция не выбрана, отключаем список контрактов
+            $('#contractSelect').prop('disabled', true);
+        }
+    });
+
+
+
+
+
+    $('#contractSelect').change(function() {
+    var contractsShortNames = $(this).val();
+
+    // Если значение контракта выбрано, выполняем запрос
+    if (contractsShortNames) {
+        // AJAX запрос для получения ограничений
+        $.get('/ticket/limitcontract', { contractsShortNames: contractsShortNames }, function(limits) {
+            console.log('Полученные ограничения:', limits); // Логирование полученных данных для отладки
+
+            // Очистить список функций
+            $('#levelSelect').empty().append('<option value="" disabled selected>Выберите ограничение</option>');
+
+            // Если список ограничений не пуст, активировать select
+            if (limits && limits.length > 0) {
+                $('#levelSelect').prop('disabled', false); // Активируем поле выбора
+                // Добавляем ограничения в список
+                limits.forEach(function(lim) {
+                    $('#levelSelect').append('<option value="' + lim + '">' + lim + '</option>');
+                });
+            } else {
+                $('#levelSelect').prop('disabled', true); // Если нет ограничений, делаем поле неактивным
+            }
+        }).fail(function() {
+            console.error("Ошибка запроса!");
+            $('#levelSelect').prop('disabled', true); // Если запрос не успешен, отключаем select
+        });
+    } else {
+        $('#levelSelect').prop('disabled', true); // Если не выбран контракт, отключаем select
+    }
+});
+
+
+</script>
+
+<footer th:insert="blocks/footer :: footer"></footer>
+</body>
+</html>

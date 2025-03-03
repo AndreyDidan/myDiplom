@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Пользователи системы</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+
+</head>
+<body>
+<header th:insert="blocks/header :: header"></header>
+
+<div class="container mt-5 mb-5">
+    <div th:each="el : ${organization}" class="alert alert-info mt-2">
+        <p><b>Наименование организации: </b><span th:text="${el.organizationName}"/></p>
+        <p><b>Краткое наименование организации: </b><span th:text="${el.littleNameOrganization}"/></p>
+        <p><b>Имя директора: </b><span th:text="${el.nameDirector}"/></p>
+        <p><b>Фамилия директора: </b><span th:text="${el.surnameDirector}"/></p>
+        <p><b>ИНН организации: </b><span th:text="${el.inn}"/></p>
+        <p><b>ОКВЭД организации: </b><span th:text="${el.okved}"/></p>
+        <p><b>Адрес организации: </b><span th:text="${el.adress}"/></p>
+        <p><b>Телефон организации: </b><span th:text="${el.phoneOrganization}"/></p>
+        <p><b>Адрес электронной почты организации: </b><span th:text="${el.emailOrganization}"/></p>
+
+
+
+        <a th:href="'/organization/'+ ${el.organizationId} + '/department'" class="btn btn-info">Отделы организации</a>
+
+        <!-- Кнопка для редактирования -->
+        <a th:href="'/organization/' + ${el.organizationId} + '/edit'" class="btn btn-warning">Редактировать</a><br>
+
+        <br><a th:href="'/organization'" class="btn btn-info">Назад</a><br><br>
+
+        <!-- Форма для удаления организации -->
+        <form th:action="'/organization/' + ${el.organizationId} + '/remove'" method="post">
+            <button class="btn btn-danger" type="submit">Удалить</button>
+        </form>
+    </div>
+</div>
+
+<footer th:insert="blocks/footer :: footer"></footer>
+</body>
+</html>

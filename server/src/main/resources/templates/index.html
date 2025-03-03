@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Добро пожаловать в менеджер заявок</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+</head>
+<body>
+<header th:insert="~{blocks/header :: header}"></header>
+
+<div class="container mt-5">
+    <h1>Список заявок</h1>
+    <form th:action="'/ticket/add'" method="get">
+        <button class="btn btn-primary" type="submit">Добавить заявку</button>
+    </form> <br>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Номер заявки</th>
+            <th>Дата открытия</th>
+            <th>Номер контракта</th>
+            <th>Уровень сопровождения</th>
+            <th>Наименование функции</th>
+            <th>Краткое описание</th>
+            <th>Исполнитель</th>
+
+            <th>Заявка просрочена</th>
+            <th>Статус</th>
+            <th>Автор заявки</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="ticket : ${tickets}"
+            th:class="${(ticket.isExpired) ? 'table-danger' : (ticket.status.name() == 'CLOSED' and not ticket.isExpired) ? 'table-success' : ''}">
+            <td th:text="${ticket.ticketId}"></td>
+            <td th:text="${#temporals.format(ticket.dateCreate, 'dd.MM.yyyy HH:mm')}"></td>
+            <td th:text="${ticket.contractId.numberContract}"></td>
+            <td th:text="${ticket.limitsId.levelName}"></td>
+            <td th:text="${ticket.nameFunction ?: 'Не задано'}"></td>
+            <td th:text="${ticket.littleDescription}"></td>
+            <td th:text="${ticket.organizationPerfomerId}"></td>
+
+            <td th:text="${ticket.isExpired}"></td>
+            <td th:text="${ticket.status}"></td>
+            <td th:text="${ticket.author.login}"></td>
+
+            <td>
+                <a th:href="'/ticket/' + ${ticket.ticketId}" class="btn btn-warning">Детальнее</a><br>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<footer th:insert="blocks/footer :: footer"></footer>
+</body>
+</html>

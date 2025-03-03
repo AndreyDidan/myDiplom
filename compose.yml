@@ -1,0 +1,12 @@
+services:
+  db:
+    image: postgres:16.1
+    container_name: manager
+    ports:
+      - "5432:5432"
+    volumes:
+      - /var/lib/postgresql/server
+    environment:
+      - POSTGRES_DB=manager
+      - POSTGRES_USER=manager
+      - POSTGRES_PASSWORD=manager

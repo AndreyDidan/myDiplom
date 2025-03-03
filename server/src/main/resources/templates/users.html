@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Пользователи системы</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+</head>
+<body>
+<header th:insert="~{blocks/header :: header}"></header>
+
+<div class="container mt-5">
+    <h1>Список пользователей</h1>
+    <form th:action="'/register/users/add'" method="get">
+        <button class="btn btn-primary" type="submit">Добавить пользователя</button>
+    </form> <br>
+
+
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th scope="col">Имя</th>
+                <th scope="col">Фамилия</th>
+                <th scope="col">Логин</th>
+                <th scope="col">Email</th>
+                <!--<th scope="col">Организация</th>
+                <th scope="col">Отдел</th>
+                <th scope="col">Должность</th>-->
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="el : ${myUsers}" class="alert alert-info mt-2">
+                <td th:text="${el.username}"></td>
+                <td th:text="${el.surname}"></td>
+                <td th:text="${el.login}"></td>
+                <td th:text="${el.email}"></td>
+                <!--<td th:text="${el.positionId.departmentId.organizationId.littleNameOrganization}"></td>
+                <td th:text="${el.positionId.departmentId.nameDepartment}"></td>
+                <td th:text="${el.positionId.namePosition}"></td>-->
+                <td>
+                    <a th:href="'/register/users/' + ${el.userId}" class="btn btn-warning">Детальнее</a><br>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<footer th:insert="blocks/footer :: footer"></footer>
+</body>
+</html>

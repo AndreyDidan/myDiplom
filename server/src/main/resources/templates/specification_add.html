@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Добавление отдела</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+</head>
+<body>
+<header th:insert="blocks/header :: header"></header>
+
+<div class="container mt-5 mb-5">
+    <h1>Добавление технического задания</h1>
+    <form action="/specification/add" method="post">
+        <input type="text" name="nameSpecification" placeholder="Введите название технического задания" class="form-control"><br>
+
+        <!-- Здесь вставляем фрагмент для выбора краткого наименования организации -->
+        <label for="organizationShortName">Организация заказчик:</label>
+        <select name="customer" class="form-control">
+            <option value="" disabled selected>Выберите организацию</option>
+            <!-- Итерация по кратким наименованиям организаций -->
+            <th:block th:each="shortName : ${organizationShortNames}">
+                <option th:value="${shortName}"
+                        th:text="${shortName}"></option>
+            </th:block>
+        </select>
+        <br>
+
+        <label for="organizationShortName">Организация исполнитель:</label>
+        <select name="perfomer" class="form-control">
+            <option value="" disabled selected>Выберите организацию</option>
+            <!-- Итерация по кратким наименованиям организаций -->
+            <th:block th:each="shortName : ${organizationShortNames}">
+                <option th:value="${shortName}"
+                        th:text="${shortName}"></option>
+            </th:block>
+        </select>
+        <br>
+
+        <label for="organizationShortName">Организация осуществляющая проверку исполнения контракта:</label>
+        <select name="execution" class="form-control">
+            <option value="" disabled selected>Выберите организацию</option>
+            <!-- Итерация по кратким наименованиям организаций -->
+            <th:block th:each="shortName : ${organizationShortNames}">
+                <option th:value="${shortName}"
+                        th:text="${shortName}"></option>
+            </th:block>
+        </select>
+        <br>
+
+
+
+        <button type="submit" class="btn btn-success">Добавить техническое задание</button>
+    </form>
+</div>
+
+<footer th:insert="blocks/footer :: footer"></footer>
+</body>
+</html>

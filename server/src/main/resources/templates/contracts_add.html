@@ -1,0 +1,115 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Добавление контракта</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+</head>
+<body>
+<header th:replace="~{blocks/header :: header}"></header>
+
+<div class="container mt-5 mb-5">
+    <h1>Добавление контракта</h1>
+
+    <!-- Блок ошибки, если она есть -->
+    <div th:if="${error}" class="alert alert-danger">
+        <p th:text="${error}"></p>
+    </div>
+
+    <form action="/contract/add" method="post">
+        <input type="text" name="nameContract" placeholder="Введите наименование контракта" class="form-control" th:value="${nameContract}"><br>
+        <input type="text" name="numberContract" placeholder="Введите номер контракта" class="form-control" th:value="${numberContract}"><br>
+        <div class="form-group">
+            <label>Тип контракта:</label><br>
+            <input type="radio" name="type" value="Создание функции"> Создание функции<br>
+            <input type="radio" name="type" value="Сопровождение программного обеспечения"> Сопровождение программного обеспечения<br>
+            <input type="radio" name="type" value="Сопровождение инфраструктуры"> Сопровождение инфраструктуры<br>
+        </div>
+        <input type="datetime-local" name="dateOpenContract" placeholder="Введите дату начала действия контракта" class="form-control" th:value="${dateOpenContract}"><br>
+
+        <input type="datetime-local" name="dateCloseContract" placeholder="Введите дату завершения действия контракта" class="form-control" th:value="${dateCloseContract}"><br>
+        <input type="number" name="priceContract" step="any" placeholder="Введите цену контракта" class="form-control" th:value="${priceContract}"><br>
+        <!-- Выбор ТЗ -->
+        <label for="specificationShortNames">Наименование технического задания:</label>
+        <select id="technicalSpecificationSelect" name="technicalSpecification" class="form-control">
+            <option value="" selected>Выберите техническое задание</option>
+            <th:block th:each="shortNameTechnicalSpecification : ${specificationShortNames}">
+                <option th:value="${shortNameTechnicalSpecification}" th:text="${shortNameTechnicalSpecification}" th:selected="${shortNameTechnicalSpecification == technicalSpecification}"></option>
+            </th:block>
+        </select>
+        <br>
+
+        <!-- Выбор организации -->
+        <label for="organizationShortName">Краткое наименование организации заказчика:</label>
+        <select id="organizationSelect" name="organizationCustomerId" class="form-control">
+            <option value="" disabled selected>Выберите организацию заказчика</option>
+            <th:block th:each="shortName : ${organizationShortNames}">
+                <option th:value="${shortName}" th:text="${shortName}" th:selected="${shortName == organizationCustomerId}"></option>
+            </th:block>
+        </select>
+        <br>
+
+        <!-- Выбор пользователя -->
+        <label for="userShortNames">Представитель организации заказчика:</label>
+        <select id="userSelect" name="userCustomerId" class="form-control">
+            <option value="" disabled selected>Выберите представителя заказчика</option>
+            <th:block th:each="MyUser : ${userShortNames}">
+                <option th:value="${MyUser}" th:text="${MyUser}" th:selected="${MyUser == userCustomerId}"></option>
+            </th:block>
+        </select>
+        <br>
+
+        <!-- Выбор организации -->
+        <label for="organizationShortName">Краткое наименование организации исполнителя:</label>
+        <select id="organizationPerfomerSelect" name="organizationPerfomerId" class="form-control">
+            <option value="" disabled selected>Выберите организацию исполнителя</option>
+            <th:block th:each="shortName : ${organizationShortNames}">
+                <option th:value="${shortName}" th:text="${shortName}" th:selected="${shortName == organizationPerfomerId}"></option>
+            </th:block>
+        </select>
+        <br>
+
+        <!-- Выбор пользователя -->
+        <label for="userShortNames">Представитель организации исполнителя:</label>
+        <select id="userPerfomerSelect" name="userPerfomerId" class="form-control">
+            <option value="" disabled selected>Выберите представителя заказчика</option>
+            <th:block th:each="MyUser : ${userShortNames}">
+                <option th:value="${MyUser}" th:text="${MyUser}" th:selected="${MyUser == userPerfomerId}"></option>
+            </th:block>
+        </select>
+        <br>
+
+
+
+        <!-- Выбор организации -->
+        <label for="organizationShortName">Краткое наименование проверяющей организации:</label>
+        <select id="organizationExecutionSelect" name="organizationExecutionId" class="form-control">
+            <option value="" disabled selected>Выберите организацию проверяющую исполнение контракта</option>
+            <th:block th:each="shortName : ${organizationShortNames}">
+                <option th:value="${shortName}" th:text="${shortName}" th:selected="${shortName == organizationExecutionId}"></option>
+            </th:block>
+        </select>
+        <br>
+
+        <!-- Выбор пользователя -->
+        <label for="userShortNames">Представитель организации исполнителя:</label>
+        <select id="userExecutionSelect" name="userExecutionId" class="form-control">
+            <option value="" disabled selected>Выберите представителя проверяющей организации</option>
+            <th:block th:each="MyUser : ${userShortNames}">
+                <option th:value="${MyUser}" th:text="${MyUser}" th:selected="${MyUser == userExecutionId}"></option>
+            </th:block>
+        </select>
+        <br>
+
+
+        <button type="submit" class="btn btn-success">Добавить контракт</button>
+    </form>
+</div>
+
+<footer th:replace="~{blocks/footer :: footer}"></footer>
+</body>
+</html>
