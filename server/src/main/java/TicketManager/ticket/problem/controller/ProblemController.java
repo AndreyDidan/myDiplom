@@ -206,38 +206,4 @@ public class ProblemController {
     }
 
 
-
-    /*@GetMapping("/allfunctionssystem")
-    @ResponseBody
-    private List<String> getAllFunctionPosition(@RequestParam String systemShortName) {
-        log.info("Попытка найти функции системы " + "'" + systemShortName + "'");
-        System system = functionSystemController.getSystem(systemShortName);
-        List<String> functionSystemShortName = functionSystemRepositry.findBySystemId(system).stream()
-                .map(FunctionSystem::getNameFunctionSystem)
-                .collect(Collectors.toList());
-        return functionSystemShortName;
-    }*/
-
-    /*@GetMapping("/allfunctionssystem")
-    @ResponseBody
-    private List<String> getAllFunctionPosition(@RequestParam String systemShortName) {
-        log.info("Попытка найти функции системы " + "'" + systemShortName + "'");
-        // Найдем систему по краткому наименованию
-        //Optional<System> system = systemRepository.findByLittleNameSystem(systemShortName);
-
-        System system = systemRepository.findByLittleNameSystem(systemShortName).get();
-
-        // Если система не найдена, возвращаем пустой список
-        if (system == null) {
-            return new ArrayList<>();
-        }
-
-        // Получаем все функции, связанные с системой
-        List<String> functionSystemShortName = functionSystemRepositry.findBySystemId(system).stream()
-                .map(FunctionSystem::getNameFunctionSystem)
-                .collect(Collectors.toList());
-
-        return functionSystemShortName;
-    }*/
-
 }

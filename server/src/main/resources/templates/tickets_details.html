@@ -29,11 +29,34 @@
         <p><b>Заявка просрочена: </b><span th:text="${el.isExpired ? 'Да' : 'Нет'}"/></p>
         <p><b>Статус заявки: </b><span th:text="${el.status}"/></p>
 
+        <!-- Отображение рекомендации -->
+        <p><b>Рекомендация: </b><span th:text="${recommendation}"/></p>
+
         <a th:href="'/ticket/' + ${el.ticketId} + '/edit'" class="btn btn-warning">Редактировать</a><br><br>
 
-        <form th:action="'/ticket/' + ${el.ticketId} + '/close'" method="post">
+        <!--<form th:action="'/ticket/' + ${el.ticketId} + '/close'" method="post">
+            <button class="btn btn-warning" type="submit">Закрыть</button>
+        </form>-->
+
+        <!-- Форма для ввода рекомендации -->
+        <form th:action="'/ticket/' + ${ticket[0].ticketId} + '/close'" method="post">
             <button class="btn btn-warning" type="submit">Закрыть</button>
         </form>
+
+        <!-- Форма для ввода рекомендации -->
+        <form th:action="'/ticket/' + ${ticket[0].ticketId} + '/addRecommendation'" method="post">
+            <div class="form-group">
+                <label for="recommendation">Рекомендация по устранению проблемы:</label>
+                <textarea name="recomendationWork" id="recommendation" class="form-control" placeholder="Введите рекомендацию..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Сохранить рекомендацию</button>
+        </form>
+
+
+
+
+
+
 
         <br><a th:href="'/ticket'" class="btn btn-info">Назад</a><br><br>
 
@@ -59,7 +82,6 @@
         <button class="btn btn-primary" type="submit">Добавить комментарий</button>
     </form>
 </div>
-
 
 <footer th:insert="blocks/footer :: footer"></footer>
 </body>

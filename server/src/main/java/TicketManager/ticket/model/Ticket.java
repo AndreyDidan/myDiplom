@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Builder
@@ -25,35 +26,50 @@ public class Ticket {
     @Column(name = "ticket_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long ticketId;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_creater_id")
     private MyUser author;
+
     @Column(name = "date_created")
     private LocalDateTime dateCreate;
+
     @Column(name = "little_description")
     private String littleDescription;
+
     @Column(name = "description")
     private String description;
+
     @Column(name = "function")
     private String nameFunction;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "problems_id")
     private Problem problemFunctionId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "contract_id")
     private Contract contractId;
+
     @Column(name = "organization_perfomer_id")
     private String organizationPerfomerId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "limits_id")
     private Limit limitsId;
+
     @Column(name = "date_closed")
     private LocalDateTime dateClose;
+
     @Column(name = "expired")
     private Boolean isExpired;
+
+    private String recommendation;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "name_status")
     private Status status;
+
 
     public Ticket(MyUser author, LocalDateTime dateCreate, String littleDescription, String description, String nameFunction,
                   Problem problemFunctionId, Contract contractId, String organizationPerfomerId,
@@ -92,5 +108,17 @@ public class Ticket {
 
     public String getAuthorName() {
         return author != null ? author.getUsername() : "<none>";
+    }
+
+
+
+    private String penaltyAmount;
+
+    public String getPenaltyAmount() {
+        return penaltyAmount != null ? penaltyAmount : "0.00";
+    }
+
+    public void setPenaltyAmount(String penaltyAmount) {
+        this.penaltyAmount = penaltyAmount;
     }
 }

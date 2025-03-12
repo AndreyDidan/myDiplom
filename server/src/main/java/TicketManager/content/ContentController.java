@@ -56,6 +56,42 @@ public class ContentController {
             } else {
                 log.warn("Пропущена заявка ID=" + ticket.getTicketId() + ": данные о лимите отсутствуют.");
             }
+            if (ticket.getIsExpired() != null && ticket.getIsExpired()) {
+                // Если заявка просрочена, рассчитываем штраф
+                if (ticket.getLimitsId() != null && ticket.getLimitsId().getPenaltysStart() != null) {
+                    Duration penaltyStart = ticket.getLimitsId().getPenaltysStart();
+                    Double penaltyPrice = ticket.getLimitsId().getPenaltyPrice();
+                    Double priceContract = ticket.getContractId().getPriceContract();
+                    Double fine = 0.0;
+
+                    // Проверяем, просрочена ли заявка
+                    if (ticket.getDateClose() != null) {
+                        long daysLate = Duration.between(ticket.getDateCreate(), ticket.getDateClose()).toDays();
+                        // Если просрочка меньше 1 дня, считаем штраф за 1 день
+                        if (daysLate > penaltyStart.toDays()) {
+                            fine = Math.max(1, daysLate) * penaltyPrice * priceContract;
+                        } else {
+                            fine = penaltyPrice * priceContract;  // если просрочка меньше 1 дня, штраф как за 1 день
+                        }
+                    } else {
+                        long daysLate = Duration.between(ticket.getDateCreate(), currentDateTime).toDays();
+                        // Если просрочка меньше 1 дня, считаем штраф за 1 день
+                        if (daysLate > penaltyStart.toDays()) {
+                            fine = Math.max(1, daysLate) * penaltyPrice * priceContract;
+                        } else {
+                            fine = penaltyPrice * priceContract;  // если просрочка меньше 1 дня, штраф как за 1 день
+                        }
+                    }
+
+                    // Округляем штраф до 2 знаков после запятой
+                    ticket.setPenaltyAmount(String.format("%.2f", fine));
+                } else {
+                    log.warn("Пропущена заявка ID=" + ticket.getTicketId() + ": данные о лимите отсутствуют.");
+                }
+            } else {
+                // Если заявка не просрочена, штраф равен 0
+                ticket.setPenaltyAmount("0.00");
+            }
         }
 
         // Повторно получаем обновлённый список заявок для отображения в модели

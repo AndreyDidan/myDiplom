@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Рекомендации</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+</head>
+<body>
+<header th:insert="~{blocks/header :: header}"></header>
+
+<div class="container mt-5">
+    <h1>Список рекоммендаций</h1>
+    <form th:action="'/contract/add'" method="get">
+        <button class="btn btn-primary" type="submit">Добавить контракт</button>
+    </form> <br>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Номер заявки</th>
+            <th>Функция</th>
+            <th>Рекоммендация</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="el : ${recomendationsWorks}" class="table-hover'">
+            <td th:text="${el.ticketId.ticketId}"></td>
+            <td th:text="${el.ticketId.nameFunction}"></td>
+            <td th:text="${el.recomendationWork}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<footer th:insert="blocks/footer :: footer"></footer>
+</body>
+</html>

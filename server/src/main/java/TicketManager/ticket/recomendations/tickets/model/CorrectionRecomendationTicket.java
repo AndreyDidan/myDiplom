@@ -1,4 +1,4 @@
-package TicketManager.ticket.recomendations.tickets.model;
+/*package TicketManager.ticket.recomendations.tickets.model;
 
 import TicketManager.systems.functionssystem.model.FunctionSystem;
 import TicketManager.ticket.SolutionInClose.model.SolutionInClose;
@@ -49,4 +49,4 @@ public class CorrectionRecomendationTicket {
         this.solutionInCloseId = solutionInCloseId;
         this.userCreaterId = userCreaterId;
     }
-}
+}*/

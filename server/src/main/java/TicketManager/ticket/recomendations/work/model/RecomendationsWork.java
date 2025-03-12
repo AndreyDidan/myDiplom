@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "correction_recomendations_tickets")
 public class RecomendationsWork {
+
     @Id
     @Column(name = "recomendation_work_id")
     @GeneratedValue(strategy = GenerationType.AUTO)

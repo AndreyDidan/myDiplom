@@ -30,6 +30,10 @@
 
             <th>Заявка просрочена</th>
             <th>Статус</th>
+
+            <th>Штраф</th>
+
+
             <th>Автор заявки</th>
             <th>Действия</th>
         </tr>
@@ -47,6 +51,10 @@
 
             <td th:text="${ticket.isExpired}"></td>
             <td th:text="${ticket.status}"></td>
+
+
+            <td th:text="${ticket.penaltyAmount}"></td>
+
             <td th:text="${ticket.author.login}"></td>
 
             <td>

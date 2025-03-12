@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Добро пожаловать в менеджер заявок</title>
+    <title>Список просроченых заявок</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,7 +13,7 @@
 <header th:insert="~{blocks/header :: header}"></header>
 
 <div class="container mt-5">
-    <h1>Список заявок</h1>
+    <h1>Список просроченых заявок</h1>
     <form th:action="'/ticket/add'" method="get">
         <button class="btn btn-primary" type="submit">Добавить заявку</button>
     </form> <br>
@@ -51,7 +51,6 @@
 
             <td th:text="${ticket.isExpired}"></td>
             <td th:text="${ticket.status}"></td>
-
 
             <td th:text="${ticket.penaltyAmount}"></td>
 
